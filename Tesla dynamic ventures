@@ -1,0 +1,6 @@
+/pages
+  /api
+    github-app.js   <-- GitHub App runs here
+index.js            <-- Optional homepage
+.env.local          <-- Local environment
+vercel.json         <-- Vercel config (optional)
