@@ -10,15 +10,50 @@
 
 ### Functions
 
+- [experimental_attachDatabasePool](index.md#experimental_attachdatabasepool)
 - [geolocation](index.md#geolocation)
+- [getCache](index.md#getcache)
 - [getEnv](index.md#getenv)
-- [getRuntimeCache](index.md#getruntimecache)
 - [ipAddress](index.md#ipaddress)
 - [next](index.md#next)
 - [rewrite](index.md#rewrite)
 - [waitUntil](index.md#waituntil)
 
 ## Functions
+
+### experimental_attachDatabasePool
+
+▸ **experimental_attachDatabasePool**(`dbPool`): `void`
+
+Call this function right after creating a database pool with the database pool object
+as argument.
+This ensures that the current function instance stays alive long enough for
+idle database connections to be removed from the pool.
+
+**`Example`**
+
+```ts
+const pgPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+experimental_attachDatabasePool(pgPool);
+```
+
+#### Parameters
+
+| Name     | Type     | Description                                                                                                                                                                                                                                                                                 |
+| :------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `dbPool` | `DbPool` | The database pool object. The supported pool types are: - PostgreSQL (pg) - MySQL2 - MariaDB - MongoDB - Redis (ioredis) - Cassandra (cassandra-driver) - OTHER: This method uses duck-typing to detect the pool type. Respectively you can pass in any object with a compatible interface. |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/functions/src/db-connections/index.ts:217](https://github.com/vercel/vercel/blob/main/packages/functions/src/db-connections/index.ts#L217)
+
+---
 
 ### geolocation
 
@@ -65,6 +100,41 @@ The location information of the request, in this way:
 #### Defined in
 
 [packages/functions/src/headers.ts:180](https://github.com/vercel/vercel/blob/main/packages/functions/src/headers.ts#L180)
+
+---
+
+### getCache
+
+▸ **getCache**(`cacheOptions?`): [`RuntimeCache`](../interfaces/index.RuntimeCache.md)
+
+Retrieves the Vercel Runtime Cache.
+
+Keys are hashed to ensure they are unique and consistent. The hashing function can be overridden by providing a custom
+`keyHashFunction` in the `cacheOptions` parameter.
+
+To specify a namespace for the cache keys, you can pass a `namespace` option in the `cacheOptions` parameter. If
+a namespace is provided, the cache keys will be prefixed with the namespace followed by a separator (default is `$`). The
+namespaceSeparator can also be customized using the `namespaceSeparator` option.
+
+**`Throws`**
+
+If no cache is available in the context and `InMemoryCache` cannot be created.
+
+#### Parameters
+
+| Name            | Type           | Description                           |
+| :-------------- | :------------- | :------------------------------------ |
+| `cacheOptions?` | `CacheOptions` | Optional configuration for the cache. |
+
+#### Returns
+
+[`RuntimeCache`](../interfaces/index.RuntimeCache.md)
+
+An instance of the Vercel Runtime Cache.
+
+#### Defined in
+
+[packages/functions/src/cache/index.ts:33](https://github.com/vercel/vercel/blob/main/packages/functions/src/cache/index.ts#L33)
 
 ---
 
@@ -115,41 +185,6 @@ https://vercel.com/docs/projects/environment-variables/system-environment-variab
 #### Defined in
 
 [packages/functions/src/get-env.ts:6](https://github.com/vercel/vercel/blob/main/packages/functions/src/get-env.ts#L6)
-
----
-
-### getRuntimeCache
-
-▸ **getRuntimeCache**(`cacheOptions?`): [`RuntimeCache`](../interfaces/index.RuntimeCache.md)
-
-Retrieves the Vercel Runtime Cache.
-
-Keys are hashed to ensure they are unique and consistent. The hashing function can be overridden by providing a custom
-`keyHashFunction` in the `cacheOptions` parameter.
-
-To specify a namespace for the cache keys, you can pass a `namespace` option in the `cacheOptions` parameter. If
-a namespace is provided, the cache keys will be prefixed with the namespace followed by a separator (default is `$`). The
-namespaceSeparator can also be customized using the `namespaceSeparator` option.
-
-**`Throws`**
-
-If no cache is available in the context and `InMemoryCache` cannot be created.
-
-#### Parameters
-
-| Name            | Type           | Description                           |
-| :-------------- | :------------- | :------------------------------------ |
-| `cacheOptions?` | `CacheOptions` | Optional configuration for the cache. |
-
-#### Returns
-
-[`RuntimeCache`](../interfaces/index.RuntimeCache.md)
-
-An instance of the Vercel Runtime Cache.
-
-#### Defined in
-
-[packages/functions/src/cache/index.ts:32](https://github.com/vercel/vercel/blob/main/packages/functions/src/cache/index.ts#L32)
 
 ---
 

@@ -3,5 +3,6 @@ export { geolocation, ipAddress } from './headers';
 export { getEnv } from './get-env';
 export { waitUntil } from './wait-until';
 export { rewrite, next } from './middleware';
-export { getRuntimeCache } from './cache';
+export { getCache } from './cache';
+export { experimental_attachDatabasePool } from './db-connections';
 export type { RuntimeCache } from './cache/types';
